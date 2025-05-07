@@ -27,7 +27,7 @@ interface WaveObserverOptions {
   threshold: number;
 }
 
-declare class DynamoWave extends HTMLElement {
+declare class CosmicWave extends HTMLElement {
   // Properties
   private isAnimating: boolean;
   private animationFrameId: number | null;
@@ -43,13 +43,14 @@ declare class DynamoWave extends HTMLElement {
   private variance: number;
   private duration: number;
   private vertical: boolean;
+  private startEndZero: boolean;
   private width: number;
   private height: number;
   private svg: SVGSVGElement;
   private path: SVGPathElement;
 
   constructor();
-  
+
   // Lifecycle methods
   connectedCallback(): void;
   disconnectedCallback(): void;
@@ -79,38 +80,39 @@ declare function interpolateWave(
 // Global declaration for custom element
 declare global {
   interface HTMLElementTagNameMap {
-    'dynamo-wave': DynamoWave;
+    'cosmic-wave': CosmicWave;
   }
 }
 
 // Component attributes interface
-interface DynamoWaveAttributes {
+interface CosmicWaveAttributes {
   'data-wave-face'?: WaveDirection;
   'data-wave-points'?: string;
   'data-variance'?: string;
   'data-wave-speed'?: string;
   'data-wave-animate'?: string;
   'data-wave-observe'?: string;
+  'data-start-end-zero'?: boolean;
 }
 
 // Extend HTMLElement interface to include our attributes
 declare global {
   interface HTMLElementTagNameMap {
-    'dynamo-wave': DynamoWave;
+    'cosmic-wave': CosmicWave;
   }
-  
+
   namespace JSX {
     interface IntrinsicElements {
-      'dynamo-wave': Partial<DynamoWaveAttributes>;
+      'cosmic-wave': Partial<CosmicWaveAttributes>;
     }
   }
 }
 
 export {
-  DynamoWave,
+  CosmicWave,
   WaveGenerationOptions,
   WavePoint,
   WaveDirection,
   WaveObserverOptions,
-  DynamoWaveAttributes
+  CosmicWaveAttributes
 };

@@ -4,33 +4,33 @@ import dts from 'rollup-plugin-dts';
 export default [
   // Main JavaScript bundle configuration
   {
-    input: 'src/dynamowaves.js',
+    input: 'src/cosmicwave.js',
     output: [
       {
-        file: 'dist/dynamowaves.js',
+        file: 'dist/cosmicwave.js',
         format: 'umd',
-        name: 'Dynamowaves',
+        name: 'cosmicwave',
       },
       {
-        file: 'dist/dynamowaves.min.js',
+        file: 'dist/cosmicwave.min.js',
         format: 'umd',
-        name: 'Dynamowaves',
+        name: 'cosmicwave',
         plugins: [terser()],
       },
       {
-        file: 'www/dynamowaves.min.js',
+        file: 'www/cosmicwave.min.js',
         format: 'umd',
-        name: 'Dynamowaves',
+        name: 'cosmicwave',
         plugins: [terser()],
       },
     ],
   },
   // Types bundle configuration
   {
-    input: './src/dynamowaves.d.ts',
+    input: './src/cosmicwave.d.ts',
     output: [
       {
-        file: 'dist/dynamowaves.d.ts',
+        file: 'dist/cosmicwave.d.ts',
         format: 'es',
       },
     ],

@@ -1,21 +1,22 @@
 {
-  "name": "dynamowaves",
-  "version": "2.0.1",
+  "name": "cosmicwave",
+  "version": "0.5.0",
   "type": "module",
   "description": "Lightweight, dependency-free SVG wave templates that dynamically generate themselves on render.",
-  "main": "dist/dynamowaves.js",
-  "module": "dist/dynamowaves.js",
-  "types": "dist/dynamowaves.d.ts",
+  "main": "dist/CosmicWave.js",
+  "module": "dist/CosmicWave.js",
+  "types": "dist/CosmicWave.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "rollup -c",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "definitionFile": "tsc src/cosmicwave.js --declaration --allowJs --emitDeclarationOnly --outDir src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mzebley/dynamowaves.git"
+    "url": "git+https://github.com/mzebley/CosmicWave.git"
   },
   "keywords": [
     "javascript",
@@ -26,14 +27,14 @@
     "generative",
     "templates-html"
   ],
-  "author": "Mark Zebley",
+  "author": "Derek Scott",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mzebley/dynamowaves/issues"
+    "url": "https://github.com/johnny13/CosmicWave/issues"
   },
-  "homepage": "https://dynamowaves.markzebley.com/",
+  "homepage": "https://CosmicWave.johnny13.com/",
   "devDependencies": {
-    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
     "rollup": "^3.29.4",
     "rollup-plugin-dts": "^6.1.1"
   }

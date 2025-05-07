@@ -3,23 +3,23 @@
   factory();
 })((function () { 'use strict';
 
-  class DynamoWave extends HTMLElement {
+  class CosmicWave extends HTMLElement {
     /**
      * Constructs a new instance of the class.
-     * 
+     *
      * @constructor
-     * 
+     *
      * @property {boolean} isAnimating - Indicates whether the animation is currently running.
      * @property {number|null} animationFrameId - The ID of the current animation frame request.
      * @property {number} elapsedTime - The elapsed time since the animation started.
      * @property {number|null} startTime - The start time of the animation.
-     * 
+     *
      * @property {boolean} isGeneratingWave - Indicates whether a wave is currently being generated.
-     * 
+     *
      * @property {Path2D|null} currentPath - The current wave path.
      * @property {Path2D|null} targetPath - The target wave path.
      * @property {Path2D|null} pendingTargetPath - The next wave path to be generated.
-     * 
+     *
      * @property {IntersectionObserver|null} intersectionObserver - The Intersection Observer instance.
      * @property {Object|null} observerOptions - The options for the Intersection Observer.
      */
@@ -31,7 +31,7 @@
       this.elapsedTime = 0;
       this.startTime = null;
 
-      this.isGeneratingWave = false; 
+      this.isGeneratingWave = false;
 
       // Track current and target wave paths
       this.currentPath = null;
@@ -47,7 +47,7 @@
      * Called when the custom element is appended to the DOM.
      * Initializes the wave properties, constructs the SVG element,
      * and sets up animation and observation if specified.
-     * 
+     *
      * @method connectedCallback
      * @returns {void}
      */
@@ -68,6 +68,8 @@
       this.width = this.vertical ? 160 : 1440;
       this.height = this.vertical ? 1440 : 160;
 
+      this.startEndZero = this.getAttribute( 'data-start-end-zero' ) === 'true';
+
       // Initialize current and target paths
       this.currentPath = generateWave({
         width: this.width,
@@ -75,6 +77,7 @@
         points: this.points,
         variance: this.variance,
         vertical: this.vertical,
+        startEndZero: this.startEndZero
       });
 
       this.targetPath = generateWave({
@@ -83,11 +86,12 @@
         points: this.points,
         variance: this.variance,
         vertical: this.vertical,
+        startEndZero: this.startEndZero
       });
 
       // Construct the SVG
       this.innerHTML = `
-      <svg 
+      <svg
         viewBox="${this.vertical ? "0 0 160 1440" : "0 0 1440 160"}"
         preserveAspectRatio="none"
         class="${classes || ""}"
@@ -147,6 +151,7 @@
             points: this.points,
             variance: this.variance,
             vertical: this.vertical,
+            startEndZero: this.startEndZero
           });
         }
 
@@ -165,6 +170,7 @@
             points: this.points,
             variance: this.variance,
             vertical: this.vertical,
+            startEndZero: this.startEndZero
           });
 
           // Continue the animation loop if still playing
@@ -209,16 +215,16 @@
 
     /**
      * Sets up an IntersectionObserver to monitor the visibility of the element.
-     * 
-     * @param {string} observeConfig - Configuration string for observation. 
-     *                                 Format: "mode:rootMargin". 
+     *
+     * @param {string} observeConfig - Configuration string for observation.
+     *                                 Format: "mode:rootMargin".
      *                                 "mode" can be "once" for one-time observation.
      *                                 "rootMargin" is an optional margin around the root.
-     * 
+     *
      * @example
      * // Observe with default root margin and trigger only once
      * setupIntersectionObserver('once:0px');
-     * 
+     *
      * @example
      * // Observe with custom root margin and continuous triggering
      * setupIntersectionObserver('continuous:10px');
@@ -226,7 +232,7 @@
     setupIntersectionObserver(observeConfig) {
       // Parse observation configuration
       const [mode, rootMargin = '0px'] = observeConfig.split(':');
-      
+
       // Determine observation mode
       const isOneTime = mode === 'once';
 
@@ -261,7 +267,7 @@
     /**
      * Generates a new wave animation with the specified duration.
      * Prevents multiple simultaneous wave generations by setting a flag.
-     * 
+     *
      * @param {number} [duration=800] - The duration of the wave animation in milliseconds. Minimum value is 1.
      */
     generateNewWave(duration = 800) {
@@ -282,6 +288,7 @@
         points: this.points,
         variance: this.variance,
         vertical: this.vertical,
+        startEndZero: this.startEndZero
       });
 
       // Animate from current path to new target
@@ -311,7 +318,7 @@
 
       if (startPoints.length !== endPoints.length) {
         console.error("Point mismatch! Regenerating waves to ensure consistency.");
-        
+
         // Regenerate both current and target paths to ensure consistency
         this.currentPath = generateWave({
           width: this.width,
@@ -319,6 +326,7 @@
           points: this.points,
           variance: this.variance,
           vertical: this.vertical,
+          startEndZero: this.startEndZero
         });
 
         this.targetPath = generateWave({
@@ -327,6 +335,7 @@
           points: this.points,
           variance: this.variance,
           vertical: this.vertical,
+          startEndZero: this.startEndZero
         });
 
         return;
@@ -365,7 +374,7 @@
   }
 
   // Custom element definition
-  customElements.define("dynamo-wave", DynamoWave);
+  customElements.define("cosmic-wave", CosmicWave);
 
   /**
    * Generates an SVG path string representing a wave pattern.
@@ -376,9 +385,10 @@
    * @param {number} options.points - The number of points in the wave.
    * @param {number} options.variance - The variance factor for the wave's randomness.
    * @param {boolean} [options.vertical=false] - Whether the wave should be vertical.
+   * @param {boolean} [options.startEndZero=false] - Whether the wave should start and end small
    * @returns {string} The SVG path string representing the wave.
    */
-  function generateWave({ width, height, points, variance, vertical = false }) {
+  function generateWave({ width, height, points, variance, vertical = false, startEndZero = false }) {
     const anchors = [];
     const step = vertical ? height / (points - 1) : width / (points - 1);
 
@@ -390,6 +400,16 @@
         ? width - width * 0.1 - Math.random() * (variance * width * 0.25)
         : height - height * 0.1 - Math.random() * (variance * height * 0.25);
       anchors.push(vertical ? { x: y, y: x } : { x, y });
+    }
+
+    if ( startEndZero ) {
+      if (vertical) {
+        anchors[0].x = 0;
+        anchors[anchors.length - 1].x = 0;
+      } else {
+        anchors[0].y = height;
+        anchors[anchors.length - 1].y = height;
+      }
     }
 
     let path = vertical
